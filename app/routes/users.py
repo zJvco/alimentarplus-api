@@ -1,7 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
-from app.services.user_service import UserService
-
+from app.services.users import UserService
+from app.schemas.users import UserCreateInput
 
 user_router = APIRouter(prefix="/users")
 
@@ -16,8 +16,10 @@ async def get_users():
 
 # Criar um usuario
 @user_router.post("/")
-async def create_user():
-    pass
+async def create_user(user_data: UserCreateInput):
+    await UserService().create_user(user_data)
+
+    return
 
 
 # Deletar um usuario
