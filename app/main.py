@@ -5,11 +5,12 @@ load_dotenv()
 
 from app.database import create_db
 from app.routes.users import user_router
+from app.routes.auth import auth_router
 
 app = FastAPI()
 
 app.include_router(user_router)
-
+app.include_router(auth_router)
 
 @app.on_event("startup")
 async def startup():

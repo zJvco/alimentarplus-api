@@ -17,7 +17,7 @@ class UserRepository(ABC):
             return result.fetchall()
     
     @abstractmethod
-    async def create(name: str, email: str, phone_number: str, cpf: str, password: str) -> None:
+    async def add(name: str, email: str, phone_number: str, cpf: str, password: str) -> None:
         async with AsyncSessionLocal() as session:
             user = User(
                 name=name,
@@ -31,3 +31,11 @@ class UserRepository(ABC):
             await session.refresh(user)
             
             return user
+
+    @abstractmethod
+    async def get_by_id(id: int):
+        async with AsyncSessionLocal() as session:
+            query = select(User).where(User.id == id)
+            user = await session.execute(query)
+
+        return user.first()
