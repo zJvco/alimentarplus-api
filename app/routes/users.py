@@ -15,7 +15,7 @@ async def get_users():
     return users
 
 
-# Criar um usuario
+# Criar um usuario (sem ser o principal)
 @user_router.post("/")
 async def create_user(user_data: UserCreateInput):
     user = await UserRepository.add(

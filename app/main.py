@@ -15,7 +15,16 @@ app.include_router(auth_router)
 @app.on_event("startup")
 async def startup():
     from app.models import (
-        users
+        users,
+        roles,
+        permissions,
+        supermarkets,
+        ongs,
+        addresses,
+        products,
+        donations,
+        categories,
+        plans
     )
 
     await create_db()
