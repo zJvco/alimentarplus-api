@@ -8,7 +8,6 @@ class Permission(Base):
     __tablename__ = "permissions"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    uid = Column(String(36), nullable=False, unique=True, default=lambda: generate_uuid())
     title = Column(String, nullable=False, unique=True)
     description = Column(String)
     created_date = Column(DateTime, default=func.now())

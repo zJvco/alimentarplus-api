@@ -2,6 +2,7 @@ import os
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import declarative_base, sessionmaker
 
+
 if os.getenv("ENVIRONMENT") == "development":
     engine = create_async_engine(
         os.getenv("DEV_DB_URI"),

@@ -8,7 +8,6 @@ class Address(Base):
     __tablename__ = "addresses"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    uid = Column(String(36), nullable=False, unique=True, default=lambda: generate_uuid())
     street = Column(String, nullable=False) # Rua
     number = Column(String, nullable=False) 
     zip_code = Column(String, nullable=False) # CEP

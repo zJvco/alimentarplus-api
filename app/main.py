@@ -7,6 +7,7 @@ from app.database import create_db
 from app.routes.users import user_router
 from app.routes.auth import auth_router
 
+
 app = FastAPI()
 
 app.include_router(user_router)

@@ -29,4 +29,4 @@ class Product(Base):
     category = relationship("Category", backref="products")
 
     def __repr__(self) -> str:
-        return "<Products %s>" % self.id
+        return "<Product %s>" % self.id

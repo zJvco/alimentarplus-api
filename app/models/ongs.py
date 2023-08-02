@@ -9,7 +9,6 @@ class Ong(Base):
     __tablename__ = "ongs"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    uid = Column(String(36), nullable=False, unique=True, default=lambda: generate_uuid())
     name = Column(String, nullable=False, unique=True) # Nome Fantasia
     business_name = Column(String, nullable=False, unique=True) # Razão Social
     state_registration = Column(String, nullable=False, unique=True) # Inscrição Estadual

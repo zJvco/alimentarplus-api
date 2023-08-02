@@ -9,9 +9,10 @@ role_permission = Table(
     "roles_permission",
     Base.metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("uid", String(36), nullable=False, unique=True, default=lambda: generate_uuid()),
     Column("role_id", Integer, ForeignKey("roles.id"), nullable=False),
-    Column("permission_id", Integer, ForeignKey("permissions.id"), nullable=False)
+    Column("permission_id", Integer, ForeignKey("permissions.id"), nullable=False),
+    Column("created_date", DateTime, default=func.now()),
+    Column("updated_date", DateTime, onupdate=func.now())
 )
 
 
@@ -19,7 +20,6 @@ class Role(Base):
     __tablename__ = "roles"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    uid = Column(String(36), nullable=False, unique=True, default=lambda: generate_uuid())
     title = Column(String, nullable=False, unique=True)
     description = Column(String)
     created_date = Column(DateTime, default=func.now())
