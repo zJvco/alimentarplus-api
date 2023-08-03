@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
-from typing import Annotated
 from datetime import timedelta
 
 from app.models.users import User
@@ -35,8 +34,8 @@ async def register(data: Request):
 
 
 @auth_router.post("/login")
-async def login(user_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
-    email = user_data.email
+async def login(user_data: OAuth2PasswordRequestForm = Depends()):
+    email = user_data.username
     password = user_data.password
 
     user = await UserRepository.get_by_email(email)

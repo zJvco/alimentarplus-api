@@ -1,24 +1,24 @@
 from fastapi import APIRouter, HTTPException, Depends
-from typing import List, Annotated
 
 from app.schemas.users import UserIn
 from app.repositories.users import UserRepository
-from app.dependencies import oauth2_scheme
+from app.utils import token_required
 
 user_router = APIRouter(prefix="/users")
 
 
 # Obter todos os usuarios
 @user_router.get("/")
-async def get_users(token: Annotated[str, Depends(oauth2_scheme)]):
+async def get_users(current_user: str = Depends(token_required)):
     users = await UserRepository.get_all()
+
 
     return users 
 
 
 # Criar um usuario (sem ser o principal)
 @user_router.post("/")
-async def create_user(user_data: UserIn):
+async def create_user(user_data: UserIn, current_user: str = Depends(token_required)):
     user = await UserRepository.add(
             user_data.name,
             user_data.email,
@@ -32,13 +32,13 @@ async def create_user(user_data: UserIn):
 
 # Deletar um usuario
 @user_router.delete("/{user_id}")
-async def delete_user():
+async def delete_user(current_user: str = Depends(token_required)):
     pass
 
 
 # Obter um usuario
 @user_router.get("/{user_id}")
-async def get_user_by_id(user_id: int):
+async def get_user_by_id(user_id: int, current_user: str = Depends(token_required)):
     user = await UserRepository.get_by_id(user_id)
 
     return user

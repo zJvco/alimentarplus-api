@@ -2,27 +2,25 @@ import uuid
 from fastapi import Depends, HTTPException
 from datetime import timedelta, datetime
 from jose import jwt, JWTError
-from typing import Annotated
 
 from app.dependencies import pwd_context, SECRET_KEY, ALGORITHM, oauth2_scheme
 from app.schemas.users import UserIn
-from app.repositories.users import UserRepository
 from app.models.users import User
 
 
-def generate_uuid():
+def generate_uuid() -> str:
     return str(uuid.uuid4())
 
 
-def verify_password(password: str, hashed_password: str):
+def verify_password(password: str, hashed_password: str) -> str:
     return pwd_context.verify(password, hashed_password)
 
 
-def generate_password_hash(password: str):
+def generate_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-def create_jwt_token(data: dict, expires_delta: timedelta):
+def create_jwt_token(data: dict, expires_delta: timedelta) -> str:
     to_encode = data.copy()
 
     if expires_delta:
@@ -40,7 +38,11 @@ def create_jwt_token(data: dict, expires_delta: timedelta):
     return encoded_jwt
 
 
-async def token_required(token: Annotated[str, Depends(oauth2_scheme)]) -> User:
+async def token_required(token: str = Depends(oauth2_scheme)) -> User:
+    from app.repositories.users import UserRepository
+
+    print("OKKKKKKKKKKKKKKKK")
+
     credentials_exception = HTTPException(
                                 status_code="401",
                                 detail="Não foi possível validar as credenciais"
