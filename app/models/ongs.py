@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime, func, Foreign
 from sqlalchemy.orm import relationship
 
 from app.database import Base
-from app.utils import generate_uuid
 
 
 class Ong(Base):

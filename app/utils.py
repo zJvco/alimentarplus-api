@@ -41,10 +41,8 @@ def create_jwt_token(data: dict, expires_delta: timedelta) -> str:
 async def token_required(token: str = Depends(oauth2_scheme)) -> User:
     from app.repositories.users import UserRepository
 
-    print("OKKKKKKKKKKKKKKKK")
-
     credentials_exception = HTTPException(
-                                status_code="401",
+                                status_code=401,
                                 detail="Não foi possível validar as credenciais"
                             )
 
@@ -62,7 +60,7 @@ async def token_required(token: str = Depends(oauth2_scheme)) -> User:
 
     if not user:
         raise HTTPException(
-            status_code="401",
+            status_code=401,
             detail="Usuário não existe no sistema"
         )
 

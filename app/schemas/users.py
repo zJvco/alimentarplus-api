@@ -17,3 +17,4 @@ class UserOut(BaseModel):
     email: EmailStr
     phone_number: constr(min_length=11, max_length=11)
     cpf: constr(min_length=11, max_length=11)
+    is_active: bool

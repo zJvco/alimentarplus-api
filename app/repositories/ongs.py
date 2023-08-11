@@ -1,18 +1,17 @@
 from abc import ABC, abstractmethod
 
 from app.database import AsyncSessionLocal
-from app.models.supermarkets import Supermarket
+from app.models.ongs import Ong
 from app.models.users import User
 from app.models.addresses import Address
-from app.models.plans import Plan
 
 
-class SupermarketRepository(ABC):
+class OngRepository(ABC):
 
     @abstractmethod
-    async def add(name: str, business_name: str, state_registration: str, phone_number: str, cnpj: str, address: Address, user: User, plan: Plan = None):
+    async def add(name: str, business_name: str, state_registration: str, phone_number: str, cnpj: str, address: Address, user: User):
         async with AsyncSessionLocal() as session:
-            supermarket = Supermarket(
+            ong = Ong(
                 name=name,
                 business_name=business_name,
                 state_registration=state_registration,
@@ -21,10 +20,10 @@ class SupermarketRepository(ABC):
                 address=address
             )
 
-            supermarket.users.append(user)
+            ong.users.append(user)
 
-            session.add(supermarket)
+            session.add(ong)
             await session.commit()
-            await session.refresh(supermarket)
+            await session.refresh(ong)
 
-        return supermarket
+        return ong

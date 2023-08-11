@@ -5,6 +5,9 @@ from datetime import timedelta
 from app.models.users import User
 from app.models.supermarkets import Supermarket
 from app.repositories.users import UserRepository
+from app.repositories.supermarkets import SupermarketRepository
+from app.repositories.ongs import OngRepository
+from app.repositories.address import AddressRepository
 from app.utils import verify_password, create_jwt_token
 from app.dependencies import ACCESS_TOKEN_EXPIRE_MINUTES
 
@@ -12,13 +15,17 @@ auth_router = APIRouter(prefix="/auth")
 
 
 @auth_router.post("/register")
-async def register(data: Request):
-    # registrando apenas supermercado
-
+async def register(type: str, data: Request):
     data = await data.json()
 
-    user_data = data["user"]
-    supermarket_data = data["supermarket"]
+    try:
+        user_data = data["user"]
+        org_data = data["org"] # Supermercado/ONG
+    except KeyError as ex:
+        HTTPException(
+            status_code=400,
+            detail="A chave 'user' não foi encontrada na estrutura JSON"
+        )
 
     user = await UserRepository.add(
         user_data["name"],
@@ -28,9 +35,40 @@ async def register(data: Request):
         user_data["password"]
     )
 
-    # supermarket = 
+    org_address = await AddressRepository.add(
+        org_data["address"]["street"],
+        org_data["address"]["number"],
+        org_data["address"]["zip_code"],
+        org_data["address"]["neighborhood"],
+        org_data["address"]["state"],
+        org_data["address"]["city"],
+        org_data["address"]["complement"]
+    )
 
-    return data
+    if type == "supermarket":
+        # supermarket_plan = 
+
+        await SupermarketRepository.add(
+            org_data["metadata"]["name"],
+            org_data["metadata"]["business_name"],
+            org_data["metadata"]["state_registration"],
+            org_data["metadata"]["phone_number"],
+            org_data["metadata"]["cnpj"],
+            org_address,
+            user
+        )
+    elif type == "ong":
+        await OngRepository.add(
+            org_data["metadata"]["name"],
+            org_data["metadata"]["business_name"],
+            org_data["metadata"]["state_registration"],
+            org_data["metadata"]["phone_number"],
+            org_data["metadata"]["cnpj"],
+            org_address,
+            user
+        )
+
+    return {"user_id": user.id}
 
 
 @auth_router.post("/login")
@@ -48,8 +86,8 @@ async def login(user_data: OAuth2PasswordRequestForm = Depends()):
 
     token = create_jwt_token(
         {
-            "sub": user.id,
-            "role": user.role
+            "sub": str(user.id),
+            # "role": user.role
         },
         timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     )
