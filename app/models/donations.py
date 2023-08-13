@@ -17,9 +17,9 @@ class Donation(Base):
     created_date = Column(DateTime, default=func.now())
     updated_date = Column(DateTime, onupdate=func.now())
 
-    supermarket = relationship("Supermarket", backref="donations")
-    ong = relationship("Ong", backref="donations")
-    product = relationship("Product", backref="donation", uselist=False)
+    supermarket = relationship("Supermarket", back_populates="donations", lazy='selectin')
+    ong = relationship("Ong", back_populates="donations", lazy='selectin')
+    product = relationship("Product", back_populates="donation", lazy='selectin', uselist=False)
 
     def __repr__(self) -> str:
         return "<Donation %s>" % self.id

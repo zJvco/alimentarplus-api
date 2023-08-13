@@ -24,7 +24,7 @@ async def register(type: str, data: Request):
     except KeyError as ex:
         HTTPException(
             status_code=400,
-            detail="A chave 'user' não foi encontrada na estrutura JSON"
+            detail="A estrutura JSON enviada não corresponde ao esperado pelo servidor"
         )
 
     user = await UserRepository.add(

@@ -17,7 +17,9 @@ class Ong(Base):
     created_date = Column(DateTime, default=func.now())
     updated_date = Column(DateTime, onupdate=func.now())
 
-    address = relationship("Address", backref="ong", uselist=False)
+    address = relationship("Address", back_populates="ong", lazy='selectin', uselist=False)
+    users = relationship("User", back_populates="ong", lazy='selectin')
+    donations = relationship("Donation", back_populates="ong", lazy='selectin')
 
     def __repr__(self) -> str:
         return "<Ong %s>" % self.id

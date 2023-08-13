@@ -15,5 +15,7 @@ class Plan(Base):
     created_date = Column(DateTime, default=func.now())
     updated_date = Column(DateTime, onupdate=func.now())
 
+    # supermarkets = relationship("Supermarket", back_populates="plan", lazy='selectin')
+
     def __repr__(self) -> str:
         return "<Plan %s>" % self.id

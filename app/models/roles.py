@@ -24,7 +24,8 @@ class Role(Base):
     created_date = Column(DateTime, default=func.now())
     updated_date = Column(DateTime, onupdate=func.now())
 
-    permissions = relationship("Permission", secondary=role_permission, backref="roles")
+    permissions = relationship("Permission", secondary=role_permission, back_populates="roles", lazy='selectin')
+    # users = relationship("User", back_populates="role", lazy='selectin')
 
     def __repr__(self) -> str:
         return "<Role %s>" % self.id

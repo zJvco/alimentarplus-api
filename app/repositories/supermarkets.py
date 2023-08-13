@@ -1,4 +1,7 @@
 from abc import ABC, abstractmethod
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
+from typing import List
 
 from app.database import AsyncSessionLocal
 from app.models.supermarkets import Supermarket
@@ -8,6 +11,14 @@ from app.models.plans import Plan
 
 
 class SupermarketRepository(ABC):
+
+    @abstractmethod
+    async def get_all() -> List[Supermarket]:
+        async with AsyncSessionLocal() as session:
+            query = select(Supermarket)
+            result = await session.execute(query)
+        
+        return result.scalars().fetchall()
 
     @abstractmethod
     async def add(name: str, business_name: str, state_registration: str, phone_number: str, cnpj: str, address: Address, user: User, plan: Plan = None):
@@ -28,3 +39,13 @@ class SupermarketRepository(ABC):
             await session.refresh(supermarket)
 
         return supermarket
+    
+    @abstractmethod
+    async def get_all_products(supermarket_id: int) -> List:
+        async with AsyncSessionLocal() as session:
+            query = select(Supermarket)
+            result = await session.execute(query)
+
+            products = result.scalar().products
+
+        return products

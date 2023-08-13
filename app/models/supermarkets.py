@@ -18,8 +18,11 @@ class Supermarket(Base):
     created_date = Column(DateTime, default=func.now())
     updated_date = Column(DateTime, onupdate=func.now())
 
-    # plan = relationship("Plan", backref="supermarkets")
-    address = relationship("Address", backref="supermarket", uselist=False)
+    # plan = relationship("Plan", back_populates="supermarkets, lazy='selectin'")
+    address = relationship("Address", back_populates="supermarket", lazy='selectin', uselist=False)
+    donations = relationship("Donation", back_populates="supermarket", lazy='selectin')
+    users = relationship("User", back_populates="supermarket", lazy='selectin')
+    products = relationship("Product", back_populates="supermarket", lazy='selectin')
 
     def __repr__(self) -> str:
         return "<Supermarket %s>" % self.id

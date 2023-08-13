@@ -4,7 +4,6 @@ from datetime import timedelta, datetime
 from jose import jwt, JWTError
 
 from app.dependencies import pwd_context, SECRET_KEY, ALGORITHM, oauth2_scheme
-from app.schemas.users import UserIn
 from app.models.users import User
 
 

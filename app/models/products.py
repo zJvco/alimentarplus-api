@@ -25,8 +25,9 @@ class Product(Base):
     created_date = Column(DateTime, default=func.now())
     updated_date = Column(DateTime, onupdate=func.now())
 
-    supermarket = relationship("Supermarket", backref="products")
-    category = relationship("Category", backref="products")
+    supermarket = relationship("Supermarket", back_populates="products", lazy='selectin')
+    category = relationship("Category", back_populates="products", lazy='selectin')
+    donation = relationship("Donation", back_populates="product", lazy='selectin', uselist=False)
 
     def __repr__(self) -> str:
         return "<Product %s>" % self.id

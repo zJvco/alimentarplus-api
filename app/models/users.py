@@ -20,9 +20,9 @@ class User(Base):
     created_date = Column(DateTime, default=func.now())
     updated_date = Column(DateTime, onupdate=func.now())
 
-    # role = relationship("Role", backref="users")
-    supermarket = relationship("Supermarket", backref="users")
-    ong = relationship("Ong", backref="users")
+    # role = relationship("Role", back_populates="users", lazy='selectin')
+    supermarket = relationship("Supermarket", back_populates="users", lazy='selectin')
+    ong = relationship("Ong", back_populates="users", lazy='selectin')
 
     def __repr__(self) -> str:
         return "<User %s>" % self.id
