@@ -13,6 +13,12 @@ elif os.getenv("ENVIRONMENT") == "production":
     engine = create_async_engine(
         os.getenv("PROD_DB_URI")
     )
+else:
+    engine = create_async_engine(
+        "sqlite+aiosqlite:///./dev.db",
+        connect_args={"check_same_thread": False},
+        echo=True
+    )
 
 AsyncSessionLocal = sessionmaker(bind=engine, class_=AsyncSession, autocommit=False, autoflush=False, future=True, expire_on_commit=False)
 Base = declarative_base()
