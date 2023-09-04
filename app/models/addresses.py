@@ -10,7 +10,7 @@ class Address(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     street = Column(String, nullable=False) # Rua
     number = Column(String, nullable=False) 
-    zip_code = Column(String, nullable=False) # CEP
+    zip_code = Column(String(8), nullable=False) # CEP
     neighborhood = Column(String, nullable=False) # Bairro
     state = Column(String, nullable=False)
     city = Column(String, nullable=False)

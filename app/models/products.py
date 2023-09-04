@@ -17,7 +17,7 @@ class Product(Base):
     total_weight_grams = Column(String, nullable=False)
     quantity_units = Column(Integer, nullable=False)
     is_active = Column(Boolean, nullable=False, default=True)
-    expiration_date = Column(DateTime)
+    expiration_date = Column(DateTime, nullable=False)
     url_product_img = Column(String, nullable=False)
     url_expiration_date_img = Column(String, nullable=False)
     id_supermarket = Column(Integer, ForeignKey("supermarkets.id"), nullable=False)
