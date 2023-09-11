@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from datetime import timedelta
+from typing import Optional
 
 from app.models.users import User
 from app.models.supermarkets import Supermarket
@@ -8,6 +9,9 @@ from app.repositories.users import UserRepository
 from app.repositories.supermarkets import SupermarketRepository
 from app.repositories.ongs import OngRepository
 from app.repositories.address import AddressRepository
+from app.schemas.users import UserIn
+from app.schemas.supermarket import SupermarketIn
+from app.schemas.ongs import OngIn
 from app.utils import verify_password, create_jwt_token
 from app.dependencies import ACCESS_TOKEN_EXPIRE_MINUTES
 
@@ -15,60 +19,79 @@ auth_router = APIRouter(prefix="/auth")
 
 
 @auth_router.post("/register")
-async def register(type: str, data: Request):
-    data = await data.json()
-
+async def register(type: str, user: UserIn, supermarket: Optional[SupermarketIn] = None, ong: Optional[OngIn] = None):
     try:
-        user_data = data["user"]
-        org_data = data["org"] # Supermercado/ONG
-    except KeyError as ex:
-        HTTPException(
-            status_code=400,
-            detail="A estrutura JSON enviada não corresponde ao esperado pelo servidor"
+        created_user = await UserRepository.add(
+            user
         )
-
-    user = await UserRepository.add(
-        user_data["name"],
-        user_data["email"],
-        user_data["phone_number"],
-        user_data["cpf"],
-        user_data["password"]
-    )
-
-    org_address = await AddressRepository.add(
-        org_data["address"]["street"],
-        org_data["address"]["number"],
-        org_data["address"]["zip_code"],
-        org_data["address"]["neighborhood"],
-        org_data["address"]["state"],
-        org_data["address"]["city"],
-        org_data["address"]["complement"]
-    )
-
+    except Exception:
+        raise HTTPException(
+            status_code=400,
+            detail="Não foi possível criar o usuário"
+        )
+    
     if type == "supermarket":
         # supermarket_plan = 
 
-        await SupermarketRepository.add(
-            org_data["metadata"]["name"],
-            org_data["metadata"]["business_name"],
-            org_data["metadata"]["state_registration"],
-            org_data["metadata"]["phone_number"],
-            org_data["metadata"]["cnpj"],
-            org_address,
-            user
-        )
-    elif type == "ong":
-        await OngRepository.add(
-            org_data["metadata"]["name"],
-            org_data["metadata"]["business_name"],
-            org_data["metadata"]["state_registration"],
-            org_data["metadata"]["phone_number"],
-            org_data["metadata"]["cnpj"],
-            org_address,
-            user
-        )
+        try:
+            address = await AddressRepository.add(
+                supermarket.address
+            )
+        except Exception:
+            # await UserRepository.delete(created_user.id)
+            
+            raise HTTPException(
+                status_code=400,
+                detail="Não foi possível cadastrar o endereço"
+            )
 
-    return {"user_id": user.id}
+        try:
+            await SupermarketRepository.add(
+                supermarket,
+                created_user,
+                address
+            )
+        except Exception:
+            # print("0"*200)
+            # print(created_user.id)
+            # await UserRepository.delete(created_user.id)
+            # await AddressRepository.delete(address.id)
+
+            raise HTTPException(
+                status_code=400,
+                detail="Não foi possível cadastrar o supermercado"
+            )
+
+
+    elif type == "ong":
+        try:
+            address = await AddressRepository.add(
+                ong.address
+            )
+        except Exception:
+            # await UserRepository.delete(created_user.id)
+            
+            raise HTTPException(
+                status_code=400,
+                detail="Não foi possível cadastrar o endereço"
+            )
+
+        try:
+            await OngRepository.add(
+                ong,
+                created_user,
+                address,
+            )
+        except Exception:
+            # await UserRepository.delete(created_user.id)
+            # await AddressRepository.delete(address.id)
+
+            raise HTTPException(
+                status_code=400,
+                detail="Não foi possível cadastrar a ONG"
+            )
+
+    return {"user_id": created_user.id}
 
 
 @auth_router.post("/login")

@@ -1,23 +1,30 @@
-from pydantic import BaseModel, ConfigDict, conint
+from pydantic import BaseModel, ConfigDict, constr, validator
 from datetime import datetime
-from models.supermarkets import Supermarket
-from models.ongs import Ong
+from typing import Optional
 
  
-class Address(BaseModel):
+class AddressIn(BaseModel):
+    street: str # Rua
+    number: str 
+    zip_code: constr(min_length=8, max_length=8) # CEP
+    neighborhood: str # Bairro
+    state: str
+    city: str
+    complement: str | None = None
+    
+    model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
 
+
+class AddressOut(BaseModel):
     id: int
     street: str # Rua
-    number: int 
-    zip_code: conint(ge=8, le=8) # CEP
+    number: str 
+    zip_code: constr(min_length=8, max_length=8) # CEP
     neighborhood: str # Bairro
     state: str
     city: str
     complement: str | None = None
     created_date: datetime
-    updated_date: datetime
+    updated_date: Optional[datetime]
 
-    supermarket: Supermarket
-    ong: Ong
-    
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)

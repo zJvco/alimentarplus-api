@@ -4,6 +4,7 @@ from sqlalchemy import select, delete
 
 from app.database import AsyncSessionLocal
 from app.models.users import User
+from app.schemas.users import UserIn
 from app.utils import generate_password_hash
 
 
@@ -18,14 +19,14 @@ class UserRepository(ABC):
         return result.scalars().fetchall()
     
     @abstractmethod
-    async def add(name: str, email: str, phone_number: str, cpf: str, password: str, role="A") -> User:
+    async def add(user: UserIn, role="A") -> User:
         async with AsyncSessionLocal() as session:
             user = User(
-                name=name,
-                email=email,
-                phone_number=phone_number,
-                cpf=cpf,
-                password_hash=generate_password_hash(password)
+                name=user.name,
+                email=user.email,
+                phone_number=user.phone_number,
+                cpf=user.cpf,
+                password_hash=generate_password_hash(user.password)
             )
 
             # user.role = role
@@ -46,6 +47,9 @@ class UserRepository(ABC):
     
     @abstractmethod
     async def delete(id: int) -> int:
+        print("-"*200)
+        print(id)
+
         async with AsyncSessionLocal() as session:
             query = delete(User).where(User.id == id)
 
