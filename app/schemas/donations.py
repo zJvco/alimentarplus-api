@@ -1,8 +1,8 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
-from models.supermarkets import Supermarket
-from models.ongs import Ong
-from models.products import Product
+from app.models.supermarkets import Supermarket
+from app.models.ongs import Ong
+from app.models.products import Product
 from typing import List
 
 
@@ -20,5 +20,5 @@ class Donations(BaseModel):
     ong: Ong
     product: List[Product]
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
     

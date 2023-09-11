@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
-from models.products import Product
+from app.models.products import Product
 from typing import List
 
 
@@ -13,4 +13,4 @@ class Categories(BaseModel):
 
     products: List[Product]
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)

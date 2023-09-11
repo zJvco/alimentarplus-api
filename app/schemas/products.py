@@ -1,8 +1,8 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
-from models.supermarkets import Supermarket
-from models.categories import Category
-from models.donations import Donation
+from app.models.supermarkets import Supermarket
+from app.models.categories import Category
+from app.models.donations import Donation
  
 class Products(BaseModel):
     id: int
@@ -26,5 +26,5 @@ class Products(BaseModel):
     category: Category
     donation: Donation
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
     

@@ -4,19 +4,20 @@ from app.database import AsyncSessionLocal
 from app.models.ongs import Ong
 from app.models.users import User
 from app.models.addresses import Address
+from app.schemas.ongs import OngIn
 
 
 class OngRepository(ABC):
 
     @abstractmethod
-    async def add(name: str, business_name: str, state_registration: str, phone_number: str, cnpj: str, address: Address, user: User):
+    async def add(ong: OngIn, user: User, address: Address):
         async with AsyncSessionLocal() as session:
             ong = Ong(
-                name=name,
-                business_name=business_name,
-                state_registration=state_registration,
-                phone_number=phone_number,
-                cnpj=cnpj,
+                name=ong.name,
+                business_name=ong.business_name,
+                state_registration=ong.state_registration,
+                phone_number=ong.phone_number,
+                cnpj=ong.cnpj,
                 address=address
             )
 

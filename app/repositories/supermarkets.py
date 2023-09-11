@@ -5,7 +5,7 @@ from typing import List
 
 from app.database import AsyncSessionLocal
 from app.models.supermarkets import Supermarket
-from app.schemas.supermarket import Supermarket as Supermarket_schema
+from app.schemas.supermarket import SupermarketIn
 from app.models.users import User
 from app.models.addresses import Address
 from app.models.plans import Plan
@@ -30,15 +30,15 @@ class SupermarketRepository(ABC):
         return supermarket.scalar()
 
     @abstractmethod
-    async def add(supermarket: Supermarket_schema, user: User, plan: Plan = None):
+    async def add(supermarket: SupermarketIn, user: User, address: Address, plan: Plan = None):
         async with AsyncSessionLocal() as session:
             supermarket = Supermarket(
-                name=Supermarket_schema.name,
-                business_name=Supermarket_schema.business_name,
-                state_registration=Supermarket_schema.state_registration,
-                phone_number=Supermarket_schema.phone_number,
-                cnpj=Supermarket_schema.cnpj,
-                address=Supermarket_schema.address
+                name=supermarket.name,
+                business_name=supermarket.business_name,
+                state_registration=supermarket.state_registration,
+                phone_number=supermarket.phone_number,
+                cnpj=supermarket.cnpj,
+                address=address
             )
 
             supermarket.users.append(user)
@@ -58,3 +58,9 @@ class SupermarketRepository(ABC):
             products = result.scalar().products
 
         return products
+    
+    # @abstractmethod
+    # async def add_with_user(supermarket: SupermarketIn, user: UserIn, address: AddressIn, plan: PlanIn):
+    #     """
+    #     Esse metodo é comumente usado na rota auth, onde temos que criar um usuário, supermercado, endereço e plano na mesma requisição
+    #     """
