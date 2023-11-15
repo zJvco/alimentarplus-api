@@ -15,7 +15,6 @@ class User(Base):
     password_hash = Column(String, nullable=False)
     is_active = Column(Boolean, nullable=False, default=True)
     # id_role = Column(Integer, ForeignKey("roles.id"), nullable=False)
-    is_supermarket = Column(Boolean, nullable=False)
     id_supermarket = Column(Integer, ForeignKey("supermarkets.id"))
     id_ong = Column(Integer, ForeignKey("ongs.id"))
     created_date = Column(DateTime, default=func.now())

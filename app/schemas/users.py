@@ -9,7 +9,6 @@ class UserIn(BaseModel):
     phone_number: constr(min_length=11, max_length=11)
     cpf: constr(min_length=11, max_length=11)
     password: str
-    is_supermarket: bool
 
 
 class UserOut(BaseModel):
@@ -18,5 +17,6 @@ class UserOut(BaseModel):
     email: EmailStr
     phone_number: constr(min_length=11, max_length=11)
     cpf: constr(min_length=11, max_length=11)
-    is_supermarket: bool
     is_active: bool
+    id_supermarket: Optional[int]
+    id_ong: Optional[int]
