@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
@@ -13,10 +14,19 @@ from app.models.permissions import Permission
 
 app = FastAPI()
 
+origins = ["*"]
+
 app.include_router(user_router)
 app.include_router(auth_router)
 app.include_router(supermarket_router)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]    
+)
 
 # async def create_default_roles_and_permissions():
 #     async with AsyncSessionLocal() as session:
@@ -29,7 +39,7 @@ app.include_router(supermarket_router)
 #             ""
 #         }
 
-    
+
 @app.exception_handler(Exception)
 async def generic_error(request, ex):
     # Alterar depois para poder loggar tudo que é erro

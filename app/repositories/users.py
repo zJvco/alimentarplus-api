@@ -26,6 +26,7 @@ class UserRepository(ABC):
                 email=user.email,
                 phone_number=user.phone_number,
                 cpf=user.cpf,
+                is_supermarket=user.is_supermarket,
                 password_hash=generate_password_hash(user.password)
             )
 

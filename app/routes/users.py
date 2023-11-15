@@ -34,7 +34,8 @@ async def create_user(user_data: UserIn):
                 user_data.email,
                 user_data.phone_number,
                 user_data.cpf,
-                user_data.password
+                user_data.password,
+                user_data.is_supermarket
             )
     except:
         raise HTTPException(
