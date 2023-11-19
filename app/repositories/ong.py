@@ -4,7 +4,7 @@ from app.database import AsyncSessionLocal
 from app.models.ongs import Ong
 from app.models.users import User
 from app.models.addresses import Address
-from app.schemas.ongs import OngIn
+from app.schemas.ong import OngIn
 
 
 class OngRepository(ABC):

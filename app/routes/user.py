@@ -1,8 +1,8 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, status
 from typing import List
 
-from app.schemas.users import UserIn, UserOut
-from app.repositories.users import UserRepository
+from app.schemas.user import UserIn, UserOut
+from app.repositories.user import UserRepository
 from app.utils import token_required
 
 user_router = APIRouter(
@@ -18,7 +18,7 @@ async def get_users():
 
     if not users:
         raise HTTPException(
-            status_code=404,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="Nenhum usuário cadastrado ainda"
         )
     
@@ -29,17 +29,11 @@ async def get_users():
 @user_router.post("/", response_model=UserOut)
 async def create_user(user_data: UserIn):
     try:
-        user = await UserRepository.add(
-                user_data.name,
-                user_data.email,
-                user_data.phone_number,
-                user_data.cpf,
-                user_data.password
-            )
+        user = await UserRepository.add(user_data)
     except:
         raise HTTPException(
-            status_code=400,
-            detail="Usuário não pode ser criado"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Erro ao criar o usuário"
         )
     
     return user
@@ -52,7 +46,7 @@ async def delete_user(user_id: int):
         await UserRepository.delete(user_id)
     except:
         raise HTTPException(
-            status_code=400,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Não foi possível excluir o usuário"
         )
     
@@ -66,7 +60,7 @@ async def get_user_by_id(user_id: int):
 
     if not user:
         raise HTTPException(
-            status_code=404,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="Usuário não encontrado"
         )
     

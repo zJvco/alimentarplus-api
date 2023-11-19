@@ -5,13 +5,13 @@ from typing import Optional
 
 from app.models.users import User
 from app.models.supermarkets import Supermarket
-from app.repositories.users import UserRepository
-from app.repositories.supermarkets import SupermarketRepository
-from app.repositories.ongs import OngRepository
+from app.repositories.user import UserRepository
+from app.repositories.supermarket import SupermarketRepository
+from app.repositories.ong import OngRepository
 from app.repositories.address import AddressRepository
-from app.schemas.users import UserIn
+from app.schemas.user import UserIn
 from app.schemas.supermarket import SupermarketIn
-from app.schemas.ongs import OngIn
+from app.schemas.ong import OngIn
 from app.utils import verify_password, create_jwt_token
 from app.dependencies import ACCESS_TOKEN_EXPIRE_MINUTES
 

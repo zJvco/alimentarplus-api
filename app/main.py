@@ -6,9 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 load_dotenv()
 
 from app.database import create_db, AsyncSessionLocal
-from app.routes.users import user_router
+from app.routes.user import user_router
 from app.routes.auth import auth_router
-from app.routes.supermarkets import supermarket_router
+from app.routes.supermarket import supermarket_router
 from app.models.roles import Role
 from app.models.permissions import Permission
 

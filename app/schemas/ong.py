@@ -3,8 +3,8 @@ from datetime import datetime
 from typing import List, Optional
 
 from app.schemas.address import AddressOut, AddressIn
-from app.schemas.donations import Donations
-from app.schemas.users import UserOut
+from app.schemas.donation import Donations
+from app.schemas.user import UserOut
 
 
 class OngIn(BaseModel):
@@ -14,7 +14,7 @@ class OngIn(BaseModel):
     phone_number: constr(min_length=11, max_length=11)
     cnpj: constr(min_length=14, max_length=14)
 
-    address: Optional[AddressIn]
+    address: AddressIn | None
     # plan: PlanIn
     
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
@@ -28,7 +28,7 @@ class OngOut(BaseModel):
     phone_number: constr(min_length=11, max_length=11)
     cnpj: constr(min_length=14, max_length=14)
     created_date: datetime
-    updated_date: Optional[datetime]
+    updated_date: datetime | None
 
     address: AddressOut
     donations: List[Donations]

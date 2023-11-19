@@ -1,6 +1,4 @@
-import uuid
 from pydantic import BaseModel, constr, EmailStr
-from typing import Optional
 
 
 class UserIn(BaseModel):
@@ -18,5 +16,5 @@ class UserOut(BaseModel):
     phone_number: constr(min_length=11, max_length=11)
     cpf: constr(min_length=11, max_length=11)
     is_active: bool
-    id_supermarket: Optional[int]
-    id_ong: Optional[int]
+    id_supermarket: int | None
+    id_ong: int | None

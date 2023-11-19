@@ -4,7 +4,7 @@ from app.models.products import Product
 from typing import List
 
 
-class Categories(BaseModel):
+class CategoryIn(BaseModel):
 
     id: int
     name: str
@@ -14,3 +14,7 @@ class Categories(BaseModel):
     products: List[Product]
 
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
+
+
+class CategoryOut(BaseModel):
+    pass

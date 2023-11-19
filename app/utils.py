@@ -38,7 +38,7 @@ def create_jwt_token(data: dict, expires_delta: timedelta) -> str:
 
 
 async def token_required(token: str = Depends(oauth2_scheme)) -> User:
-    from app.repositories.users import UserRepository
+    from app.repositories.user import UserRepository
 
     credentials_exception = HTTPException(
                                 status_code=401,

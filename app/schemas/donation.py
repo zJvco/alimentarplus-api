@@ -6,7 +6,7 @@ from app.models.products import Product
 from typing import List
 
 
-class Donations(BaseModel):
+class DonationIn(BaseModel):
     id: int
     uid: str
     situation: str | None = None
@@ -22,3 +22,6 @@ class Donations(BaseModel):
 
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
     
+
+class DonationOut(BaseModel):
+    pass

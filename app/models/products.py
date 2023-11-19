@@ -9,7 +9,7 @@ class Product(Base):
     __tablename__ = "products"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    uid = Column(String(36), nullable=False, unique=True, default=lambda: generate_uuid())
+    # uid = Column(String(36), nullable=False, unique=True, default=lambda: generate_uuid())
     name = Column(String, nullable=False, unique=True)
     brand = Column(String, nullable=False)
     description = Column(String)

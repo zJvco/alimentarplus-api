@@ -1,6 +1,5 @@
 from pydantic import BaseModel, ConfigDict, constr, validator
 from datetime import datetime
-from typing import Optional
 
  
 class AddressIn(BaseModel):
@@ -10,7 +9,7 @@ class AddressIn(BaseModel):
     neighborhood: str # Bairro
     state: str
     city: str
-    complement: str | None = None
+    complement: str | None
     
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
 
@@ -23,8 +22,8 @@ class AddressOut(BaseModel):
     neighborhood: str # Bairro
     state: str
     city: str
-    complement: str | None = None
+    complement: str | None
     created_date: datetime
-    updated_date: Optional[datetime]
+    updated_date: datetime | None
 
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)

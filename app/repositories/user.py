@@ -4,7 +4,7 @@ from sqlalchemy import select, delete
 
 from app.database import AsyncSessionLocal
 from app.models.users import User
-from app.schemas.users import UserIn
+from app.schemas.user import UserIn
 from app.utils import generate_password_hash
 
 
