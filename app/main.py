@@ -9,6 +9,7 @@ from app.database import create_db, AsyncSessionLocal
 from app.routes.user import user_router
 from app.routes.auth import auth_router
 from app.routes.supermarket import supermarket_router
+from app.routes.ong import ong_router
 from app.models.roles import Role
 from app.models.permissions import Permission
 
@@ -19,6 +20,8 @@ origins = ["*"]
 app.include_router(user_router)
 app.include_router(auth_router)
 app.include_router(supermarket_router)
+app.include_router(ong_router)
+
 
 app.add_middleware(
     CORSMiddleware,

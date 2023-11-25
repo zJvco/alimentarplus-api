@@ -5,6 +5,8 @@ from app.repositories.supermarket import SupermarketRepository
 from app.schemas.supermarket import SupermarketIn, SupermarketOut
 from app.repositories.product import ProductRepository
 from app.schemas.product import ProductIn, ProductOut
+from app.schemas.user import UserIn
+
 
 supermarket_router = APIRouter(
     prefix="/supermarkets"
@@ -19,7 +21,6 @@ async def get_supermarkets():
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Nenhum supermercado registrado"
         )
-    
     return supermarkets
 
 @supermarket_router.get("/{id}", response_model=SupermarketOut)
@@ -31,7 +32,6 @@ async def get_supermarket_by_id(id: int):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Nenhum supermercado registrado"
         )
-    
     return supermarket
 
 @supermarket_router.get("/{supermarket_id}/products", response_model=List[ProductOut])
@@ -43,7 +43,6 @@ async def get_supermarket_products(supermarket_id: int):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="O supermercado não possui nenhum produto"
         )
-
     return products
 
 @supermarket_router.post("/{supermarket_id}/products", response_model=ProductOut)
@@ -55,5 +54,28 @@ async def create_product(supermarket_id: int, product_data: ProductIn):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Erro ao criar o produto"
         )
-    
     return product
+
+
+@supermarket_router.post("/")
+async def create(supermarket: SupermarketIn, user: UserIn):
+    new_supermarket = await SupermarketRepository.add(supermarket, user)
+    return new_supermarket
+
+
+@supermarket_router.put("/")
+async def update(supermarket: SupermarketIn):
+    data = SupermarketRepository.update(supermarket)
+    return data
+
+
+@supermarket_router.put("/update-address")
+async def update_address(supermarket: SupermarketIn):
+    data = SupermarketRepository.update_address(supermarket)
+    return data
+
+
+@supermarket_router.delete("/{id}")
+async def delete_supermarket(id: int):
+    ...
+    

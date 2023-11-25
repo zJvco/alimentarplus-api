@@ -19,7 +19,7 @@ auth_router = APIRouter(prefix="/auth")
 
 
 @auth_router.post("/register")
-async def register(type: str, user: UserIn, supermarket: Optional[SupermarketIn] = None, ong: Optional[OngIn] = None):
+async def register(type: str, user: UserIn, supermarket: SupermarketIn | None = None, ong: OngIn | None = None):
     try:
         created_user = await UserRepository.add(
             user

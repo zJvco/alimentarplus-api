@@ -3,6 +3,7 @@ from sqlalchemy import select, delete
 
 from app.models.addresses import Address
 from app.schemas.address import AddressIn
+from app.schemas.supermarket import SupermarketIn
 from app.database import AsyncSessionLocal
 
 
@@ -26,6 +27,14 @@ class AddressRepository(ABC):
             await session.refresh(address)
 
         return address
+    
+    @abstractmethod
+    async def get_by_supermarket(supermarket: SupermarketIn):
+        async with AsyncSessionLocal() as session:
+            query = select(Address).where(Address.supermarket.cnpj == supermarket.cnpj)
+            address = await session.execute(query)
+            return address
+
 
     @abstractmethod
     async def delete(id: int) -> int:
@@ -36,3 +45,4 @@ class AddressRepository(ABC):
             await session.commit()
         
         return id
+    
