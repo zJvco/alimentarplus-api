@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from app.schemas.address import AddressOut, AddressIn
-from app.schemas.donation import Donations
+from app.schemas.donation import DonationOut
 from app.schemas.user import UserOut
 
 
@@ -31,7 +31,7 @@ class OngOut(BaseModel):
     updated_date: datetime | None
 
     address: AddressOut
-    donations: List[Donations]
+    donations: List[DonationOut]
     users: List[UserOut]
 
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)

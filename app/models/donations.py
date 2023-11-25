@@ -9,7 +9,7 @@ class Donation(Base):
     __tablename__ = "donations"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    uid = Column(String(36), nullable=False, unique=True, default=lambda: generate_uuid())
+    # uid = Column(String(36), nullable=False, unique=True, default=lambda: generate_uuid())
     situation = Column(String)
     id_supermarket = Column(Integer, ForeignKey("supermarkets.id"), nullable=False)
     id_ong = Column(Integer, ForeignKey("ongs.id"), nullable=False)

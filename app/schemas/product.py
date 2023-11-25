@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict
-from datetime import datetime
+from datetime import datetime, date
 
 
 class ProductIn(BaseModel):
@@ -10,7 +10,7 @@ class ProductIn(BaseModel):
     total_weight_grams: str
     quantity_units: int
     is_active: bool | None = None
-    expiration_date: datetime
+    expiration_date: date
     url_product_img: str
     url_expiration_date_img: str 
 
@@ -26,7 +26,7 @@ class ProductOut(BaseModel):
     total_weight_grams: str
     quantity_units: int
     is_active: bool
-    expiration_date: datetime
+    expiration_date: date
     url_product_img: str
     url_expiration_date_img: str 
     id_supermarket: int

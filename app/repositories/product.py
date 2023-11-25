@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from sqlalchemy import select
+from sqlalchemy import select, update, delete
 from sqlalchemy.exc import IntegrityError
 
 from app.database import AsyncSessionLocal
@@ -18,6 +18,14 @@ class ProductRepository():
             result = await session.execute(query)
 
         return result.scalars().fetchall()
+    
+    @abstractmethod
+    async def get_product_by_supermarket_id(supermarket_id: int, product_id: int):
+        async with AsyncSessionLocal() as session:
+            query = select(Product).where(Supermarket.id == supermarket_id, Product.id == product_id)
+            result = await session.execute(query)
+
+        return result.scalar()
     
     @abstractmethod
     async def add_product_by_supermarket_id(supermarket_id: int, product: ProductIn):
@@ -44,3 +52,21 @@ class ProductRepository():
             await session.refresh(product)
 
         return product
+
+    @abstractmethod
+    async def update(id: int, data: dict):
+        async with AsyncSessionLocal() as session:
+            query = update(Product).where(Product.id == id).values(data)
+            await session.execute(query)
+            await session.commit()  
+
+        return id
+    
+    @abstractmethod
+    async def delete(id: int):
+        async with AsyncSessionLocal() as session:
+            query = delete(Product).where(Product.id == id)
+            await session.execute(query)
+            await session.commit()
+        
+        return id

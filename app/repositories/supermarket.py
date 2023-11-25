@@ -25,9 +25,9 @@ class SupermarketRepository(ABC):
     async def get_by_id(id: int) -> Supermarket:
         async with AsyncSessionLocal() as session:
             query = select(Supermarket).where(Supermarket.id == id)
-            supermarket = await session.execute(query)
+            result = await session.execute(query)
         
-        return supermarket.scalar()
+        return result.scalar()
 
     @abstractmethod
     async def add(supermarket: SupermarketIn, user: User, address: Address, plan: Plan = None):
@@ -49,15 +49,15 @@ class SupermarketRepository(ABC):
 
         return supermarket
     
-    @abstractmethod
-    async def get_all_products(supermarket_id: int) -> List:
-        async with AsyncSessionLocal() as session:
-            query = select(Supermarket)
-            result = await session.execute(query)
+    # @abstractmethod
+    # async def get_all_products(supermarket_id: int) -> List:
+    #     async with AsyncSessionLocal() as session:
+    #         query = select(Supermarket)
+    #         result = await session.execute(query)
 
-            products = result.scalar().products
+    #         products = result.scalar().products
 
-        return products
+    #     return products
     
     # @abstractmethod
     # async def add_with_user(supermarket: SupermarketIn, user: UserIn, address: AddressIn, plan: PlanIn):

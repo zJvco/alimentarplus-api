@@ -1,13 +1,15 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List
 
 from app.repositories.supermarket import SupermarketRepository
 from app.schemas.supermarket import SupermarketIn, SupermarketOut
 from app.repositories.product import ProductRepository
 from app.schemas.product import ProductIn, ProductOut
+from app.utils import token_required
 
 supermarket_router = APIRouter(
-    prefix="/supermarkets"
+    prefix="/supermarkets",
+    dependencies=[Depends(token_required)]
 )
 
 @supermarket_router.get("/", response_model=List[SupermarketOut])
@@ -46,6 +48,18 @@ async def get_supermarket_products(supermarket_id: int):
 
     return products
 
+@supermarket_router.get("/{supermarket_id}/products/{product_id}", response_model=ProductOut)
+async def get_supermarket_product(supermarket_id: int, product_id: int):
+    product = await ProductRepository.get_product_by_supermarket_id(supermarket_id, product_id)
+
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="O produto não existe neste supermercado"
+        )
+
+    return product
+
 @supermarket_router.post("/{supermarket_id}/products", response_model=ProductOut)
 async def create_product(supermarket_id: int, product_data: ProductIn):
     try:
@@ -57,3 +71,15 @@ async def create_product(supermarket_id: int, product_data: ProductIn):
         )
     
     return product
+
+@supermarket_router.put("/{supermarket_id}/products/{product_id}")
+async def update_product(supermarket_id: int, product_id: int, product_data: ProductIn):
+    result = await ProductRepository.update(product_id, dict(product_data))
+
+    return { "id": result }
+
+@supermarket_router.delete("/{supermarket_id}/products/{product_id}")
+async def delete_product(supermarket_id: int, product_id: int):
+    result = await ProductRepository.delete(product_id)
+
+    return { "id": result }

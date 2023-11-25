@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List, Optional, Dict
 
 from app.schemas.address import AddressOut, AddressIn
-from app.schemas.donation import Donations
+from app.schemas.donation import DonationOut
 from app.schemas.product import ProductOut
 from app.schemas.user import UserOut
 
@@ -33,7 +33,7 @@ class SupermarketOut(BaseModel):
 
     #plan: "Plan"
     address: AddressOut
-    donations: List[Donations]
+    donations: List[DonationOut]
     products:  List[ProductOut]
     users: List[UserOut]
 

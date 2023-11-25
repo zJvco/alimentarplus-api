@@ -1,14 +1,15 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
-from app.models.supermarkets import Supermarket
-from app.models.ongs import Ong
-from app.models.products import Product
 from typing import List
 
 
 class DonationIn(BaseModel):
-    id: int
-    uid: str
+    situation: str | None = None
+
+    model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
+    
+
+class DonationOut(BaseModel):
     situation: str | None = None
     id_supermarket: int
     id_ong: int
@@ -16,12 +17,4 @@ class DonationIn(BaseModel):
     created_date: datetime
     updated_date: datetime
 
-    supermarket: Supermarket
-    ong: Ong
-    product: List[Product]
-
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
-    
-
-class DonationOut(BaseModel):
-    pass
