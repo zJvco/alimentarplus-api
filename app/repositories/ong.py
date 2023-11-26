@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from sqlalchemy import select
 
 from app.database import AsyncSessionLocal
 from app.models.ongs import Ong
@@ -8,6 +9,22 @@ from app.schemas.ong import OngIn
 
 
 class OngRepository(ABC):
+
+    @abstractmethod
+    async def get_all():
+        async with AsyncSessionLocal() as session:
+            query = select(Ong)
+            result = await session.execute(query)
+
+        return result.scalars().fetchall()
+
+    @abstractmethod
+    async def get_by_id(id: int):
+        async with AsyncSessionLocal() as session:
+            query = select(Ong).where(Ong.id == id)
+            result = await session.execute(query)
+
+        return result.scalar()
 
     @abstractmethod
     async def add(ong: OngIn, user: User, address: Address):

@@ -4,13 +4,16 @@ from typing import List
 from app.repositories.supermarket import SupermarketRepository
 from app.schemas.supermarket import SupermarketIn, SupermarketOut
 from app.repositories.product import ProductRepository
+from app.repositories.donation import DonationRepository
 from app.schemas.product import ProductIn, ProductOut
+from app.schemas.donation import DonationOut
 from app.utils import token_required
 
 supermarket_router = APIRouter(
     prefix="/supermarkets",
     dependencies=[Depends(token_required)]
 )
+
 
 @supermarket_router.get("/", response_model=List[SupermarketOut])
 async def get_supermarkets():
@@ -24,6 +27,7 @@ async def get_supermarkets():
     
     return supermarkets
 
+
 @supermarket_router.get("/{id}", response_model=SupermarketOut)
 async def get_supermarket_by_id(id: int):
     supermarket = await SupermarketRepository.get_by_id(id)
@@ -35,6 +39,7 @@ async def get_supermarket_by_id(id: int):
         )
     
     return supermarket
+
 
 @supermarket_router.get("/{supermarket_id}/products", response_model=List[ProductOut])
 async def get_supermarket_products(supermarket_id: int):
@@ -48,6 +53,7 @@ async def get_supermarket_products(supermarket_id: int):
 
     return products
 
+
 @supermarket_router.get("/{supermarket_id}/products/{product_id}", response_model=ProductOut)
 async def get_supermarket_product(supermarket_id: int, product_id: int):
     product = await ProductRepository.get_product_by_supermarket_id(supermarket_id, product_id)
@@ -59,6 +65,7 @@ async def get_supermarket_product(supermarket_id: int, product_id: int):
         )
 
     return product
+
 
 @supermarket_router.post("/{supermarket_id}/products", response_model=ProductOut)
 async def create_product(supermarket_id: int, product_data: ProductIn):
@@ -72,14 +79,24 @@ async def create_product(supermarket_id: int, product_data: ProductIn):
     
     return product
 
+
 @supermarket_router.put("/{supermarket_id}/products/{product_id}")
 async def update_product(supermarket_id: int, product_id: int, product_data: ProductIn):
-    result = await ProductRepository.update(product_id, dict(product_data))
+    id = await ProductRepository.update(product_id, dict(product_data))
 
-    return { "id": result }
+    return { "id": id }
+
 
 @supermarket_router.delete("/{supermarket_id}/products/{product_id}")
 async def delete_product(supermarket_id: int, product_id: int):
-    result = await ProductRepository.delete(product_id)
+    id = await ProductRepository.delete(product_id)
 
-    return { "id": result }
+    return { "id": id }
+
+
+@supermarket_router.get("/{supermarket_id}/donations", response_model=List[DonationOut])
+async def get_all_supermarket_donations(supermarket_id: int):
+    donations = await DonationRepository.get_all_donations_by_supermarket_id(supermarket_id)
+
+    return donations
+    
