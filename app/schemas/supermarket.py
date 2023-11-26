@@ -12,9 +12,9 @@ from app.schemas.plan import PlanIn, PlanOut, PlanInAuth
 class SupermarketIn(BaseModel):
     name: str # Nome fantasia
     business_name: str # Razão Social
-    state_registration: str # Inscrição Estadual
-    phone_number: constr(min_length=11, max_length=11)
-    cnpj: constr(min_length=14, max_length=14)
+    state_registration: constr(pattern=r'^\d+$') # Inscrição Estadual
+    phone_number: constr(min_length=11, max_length=11, pattern=r'^\d+$') 
+    cnpj: constr(min_length=14, max_length=14, pattern=r'^\d+$') 
 
     address: AddressIn
     plan: PlanIn 
@@ -26,9 +26,9 @@ class SupermarketOut(BaseModel):
     id: int
     name: str # Nome fantasia
     business_name: str # Razão Social
-    state_registration: str # Inscrição Estadual
-    phone_number: constr(min_length=11, max_length=11)
-    cnpj: constr(min_length=14, max_length=14)
+    state_registration: constr(pattern=r'^\d+$') # Inscrição Estadual
+    phone_number: constr(min_length=11, max_length=11, pattern=r'^\d+$') 
+    cnpj: constr(min_length=14, max_length=14, pattern=r'^\d+$') 
     created_date: datetime
     updated_date: datetime | None
 
