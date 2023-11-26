@@ -13,12 +13,12 @@ class Supermarket(Base):
     state_registration = Column(String, nullable=False, unique=True) # Inscrição Estadual
     phone_number = Column(String(11), nullable=False, unique=True)
     cnpj = Column(String(14), nullable=False, unique=True)
-    # id_plan = Column(Integer, ForeignKey("plans.id"), nullable=False)
+    id_plan = Column(Integer, ForeignKey("plans.id"), nullable=False)
     id_address = Column(Integer, ForeignKey("addresses.id"), nullable=False)
     created_date = Column(DateTime, default=func.now())
     updated_date = Column(DateTime, onupdate=func.now())
 
-    # plan = relationship("Plan", back_populates="supermarkets, lazy='selectin'")
+    plan = relationship("Plan", back_populates="supermarkets", lazy='selectin')
     address = relationship("Address", back_populates="supermarket", lazy='selectin', uselist=False)
     donations = relationship("Donation", back_populates="supermarket", lazy='selectin')
     users = relationship("User", back_populates="supermarket", lazy='selectin')

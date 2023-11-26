@@ -1,16 +1,19 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List
 
 from app.repositories.supermarket import SupermarketRepository
 from app.schemas.supermarket import SupermarketIn, SupermarketOut
 from app.repositories.product import ProductRepository
+from app.repositories.donation import DonationRepository
 from app.schemas.product import ProductIn, ProductOut
-from app.schemas.user import UserIn
-
+from app.schemas.donation import DonationOut
+from app.utils import token_required
 
 supermarket_router = APIRouter(
-    prefix="/supermarkets"
+    prefix="/supermarkets",
+    dependencies=[Depends(token_required)]
 )
+
 
 @supermarket_router.get("/", response_model=List[SupermarketOut])
 async def get_supermarkets():
@@ -21,7 +24,9 @@ async def get_supermarkets():
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Nenhum supermercado registrado"
         )
+    
     return supermarkets
+
 
 @supermarket_router.get("/{id}", response_model=SupermarketOut)
 async def get_supermarket_by_id(id: int):
@@ -32,7 +37,9 @@ async def get_supermarket_by_id(id: int):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Nenhum supermercado registrado"
         )
+    
     return supermarket
+
 
 @supermarket_router.get("/{supermarket_id}/products", response_model=List[ProductOut])
 async def get_supermarket_products(supermarket_id: int):
@@ -43,7 +50,22 @@ async def get_supermarket_products(supermarket_id: int):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="O supermercado não possui nenhum produto"
         )
+
     return products
+
+
+@supermarket_router.get("/{supermarket_id}/products/{product_id}", response_model=ProductOut)
+async def get_supermarket_product(supermarket_id: int, product_id: int):
+    product = await ProductRepository.get_product_by_supermarket_id(supermarket_id, product_id)
+
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="O produto não existe neste supermercado"
+        )
+
+    return product
+
 
 @supermarket_router.post("/{supermarket_id}/products", response_model=ProductOut)
 async def create_product(supermarket_id: int, product_data: ProductIn):
@@ -54,28 +76,27 @@ async def create_product(supermarket_id: int, product_data: ProductIn):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Erro ao criar o produto"
         )
+    
     return product
 
 
-@supermarket_router.post("/")
-async def create(supermarket: SupermarketIn, user: UserIn):
-    new_supermarket = await SupermarketRepository.add(supermarket, user)
-    return new_supermarket
+@supermarket_router.put("/{supermarket_id}/products/{product_id}")
+async def update_product(supermarket_id: int, product_id: int, product_data: ProductIn):
+    id = await ProductRepository.update(product_id, dict(product_data))
+
+    return { "id": id }
 
 
-@supermarket_router.put("/")
-async def update(supermarket: SupermarketIn):
-    data = SupermarketRepository.update(supermarket)
-    return data
+@supermarket_router.delete("/{supermarket_id}/products/{product_id}")
+async def delete_product(supermarket_id: int, product_id: int):
+    id = await ProductRepository.delete(product_id)
+
+    return { "id": id }
 
 
-@supermarket_router.put("/update-address")
-async def update_address(supermarket: SupermarketIn):
-    data = SupermarketRepository.update_address(supermarket)
-    return data
+@supermarket_router.get("/{supermarket_id}/donations", response_model=List[DonationOut])
+async def get_all_supermarket_donations(supermarket_id: int):
+    donations = await DonationRepository.get_all_donations_by_supermarket_id(supermarket_id)
 
-
-@supermarket_router.delete("/{id}")
-async def delete_supermarket(id: int):
-    ...
+    return donations
     
