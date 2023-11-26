@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.exc import IntegrityError
 
 load_dotenv()
 
@@ -13,8 +14,11 @@ from app.routes.upload import upload_router
 from app.routes.donation import donation_router
 from app.routes.ong import ong_router
 from app.routes.products import products_router
+from app.routes.plan import plan_router
 from app.models.roles import Role
 from app.models.permissions import Permission
+from app.repositories.plan import PlanRepository
+from app.schemas.plan import PlanIn
 
 app = FastAPI()
 
@@ -27,6 +31,7 @@ app.include_router(upload_router)
 app.include_router(donation_router)
 app.include_router(ong_router)
 app.include_router(products_router)
+app.include_router(plan_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -70,3 +75,23 @@ async def startup():
     )
 
     await create_db()
+
+    try:
+        # Criar plano free
+        await PlanRepository.add(PlanIn(
+            name="free",
+            price=0.00,
+            description="doe alimentos, ajude pessoas"
+        ))
+    except IntegrityError as e:
+        pass
+
+    try:
+        # Criar plano premium
+        await PlanRepository.add(PlanIn(
+            name="premium",
+            price=39.99,
+            description="certificado exclusivo, campanha de marketing"
+        ))
+    except IntegrityError as e:
+        pass

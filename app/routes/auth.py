@@ -14,6 +14,7 @@ from app.schemas.supermarket import SupermarketIn
 from app.schemas.ong import OngIn
 from app.utils import verify_password, create_jwt_token
 from app.dependencies import ACCESS_TOKEN_EXPIRE_MINUTES
+from app.repositories.plan import PlanRepository
 
 auth_router = APIRouter(prefix="/auth")
 
@@ -31,15 +32,19 @@ async def register(type: str, user: UserIn, supermarket: Optional[SupermarketIn]
         )
     
     if type == "supermarket":
-        # supermarket_plan = 
-
+        try:
+            plan = await PlanRepository.get_by_name(supermarket.plan.name)
+        except Exception:
+            raise HTTPException(
+                status_code=400,
+                detail="O plano indicado não existe"
+            )
+        
         try:
             address = await AddressRepository.add(
                 supermarket.address
             )
         except Exception:
-            # await UserRepository.delete(created_user.id)
-            
             raise HTTPException(
                 status_code=400,
                 detail="Não foi possível cadastrar o endereço"
@@ -49,14 +54,10 @@ async def register(type: str, user: UserIn, supermarket: Optional[SupermarketIn]
             await SupermarketRepository.add(
                 supermarket,
                 created_user,
-                address
+                address,
+                plan
             )
         except Exception:
-            # print("0"*200)
-            # print(created_user.id)
-            # await UserRepository.delete(created_user.id)
-            # await AddressRepository.delete(address.id)
-
             raise HTTPException(
                 status_code=400,
                 detail="Não foi possível cadastrar o supermercado"

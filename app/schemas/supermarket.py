@@ -6,6 +6,7 @@ from app.schemas.address import AddressOut, AddressIn
 from app.schemas.donation import DonationOut
 from app.schemas.product import ProductOut
 from app.schemas.user import UserOut
+from app.schemas.plan import PlanIn, PlanOut, PlanInAuth
 
 
 class SupermarketIn(BaseModel):
@@ -15,8 +16,8 @@ class SupermarketIn(BaseModel):
     phone_number: constr(min_length=11, max_length=11)
     cnpj: constr(min_length=14, max_length=14)
 
-    address: AddressIn | None
-    # plan: PlanIn
+    address: AddressIn
+    plan: PlanIn 
     
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
 
@@ -31,7 +32,7 @@ class SupermarketOut(BaseModel):
     created_date: datetime
     updated_date: datetime | None
 
-    #plan: "Plan"
+    plan: PlanOut
     address: AddressOut
     donations: List[DonationOut]
     products:  List[ProductOut]

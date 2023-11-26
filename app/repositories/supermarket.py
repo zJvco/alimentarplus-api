@@ -30,7 +30,7 @@ class SupermarketRepository(ABC):
         return result.scalar()
 
     @abstractmethod
-    async def add(supermarket: SupermarketIn, user: User, address: Address, plan: Plan = None):
+    async def add(supermarket: SupermarketIn, user: User, address: Address, plan: Plan):
         async with AsyncSessionLocal() as session:
             supermarket = Supermarket(
                 name=supermarket.name,
@@ -41,6 +41,8 @@ class SupermarketRepository(ABC):
                 address=address
             )
 
+            supermarket.address = address
+            supermarket.plan = plan
             supermarket.users.append(user)
 
             session.add(supermarket)
