@@ -6,7 +6,7 @@ from app.schemas.address import AddressOut, AddressIn
 from app.schemas.donation import DonationOut
 from app.schemas.product import ProductOut
 from app.schemas.user import UserOut
-from app.schemas.plan import PlanIn, PlanOut, PlanInAuth
+from app.schemas.plan import PlanIn, PlanOut
 
 
 class SupermarketIn(BaseModel):
@@ -39,3 +39,9 @@ class SupermarketOut(BaseModel):
     users: List[UserOut]
 
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
+
+
+# class SupermarketUpdatePlanIn(BaseModel):
+#     plan_id: int
+
+#     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)

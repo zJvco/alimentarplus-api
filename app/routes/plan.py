@@ -13,6 +13,6 @@ plan_router = APIRouter(
 
 @plan_router.get("/", response_model=List[PlanOut])
 async def get_all_plans():
-    plans = PlanRepository.get_all()
+    plans = await PlanRepository.get_all()
 
     return plans

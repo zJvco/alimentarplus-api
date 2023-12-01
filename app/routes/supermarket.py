@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Request
 from typing import List
 
 from app.repositories.supermarket import SupermarketRepository
@@ -7,6 +7,8 @@ from app.repositories.product import ProductRepository
 from app.repositories.donation import DonationRepository
 from app.schemas.product import ProductIn, ProductOut
 from app.schemas.donation import DonationOut
+from app.schemas.plan import UpdatePlanIn
+from app.repositories.plan import PlanRepository
 from app.utils import token_required
 
 supermarket_router = APIRouter(
@@ -100,3 +102,9 @@ async def get_all_supermarket_donations(supermarket_id: int):
 
     return donations
     
+    
+@supermarket_router.post("/{supermarket_id}/update-plan")
+async def update_supermarket_plan(supermarket_id: int, plan_id: UpdatePlanIn):
+    id = await SupermarketRepository.update_plan(supermarket_id, plan_id.id)
+
+    return { "id": id }

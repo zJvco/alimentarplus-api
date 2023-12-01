@@ -5,8 +5,8 @@ from typing import List, Optional
 
 class PlanIn(BaseModel):
     name: str
-    price: float | None = None
-    description: str | None = None
+    price: float
+    description: str
 
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
 
@@ -22,7 +22,7 @@ class PlanOut(BaseModel):
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
 
 
-class PlanInAuth(BaseException):
+class UpdatePlanIn(BaseModel):
     id: int
 
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
