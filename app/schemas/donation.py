@@ -14,11 +14,11 @@ class DonationIn(BaseModel):
 
 class DonationOut(BaseModel):
     id: int
-    situation: str | None = None
+    situation: str | None
     id_supermarket: int
     id_ong: int
     id_product: int
     created_date: datetime
-    updated_date: datetime | None = None
+    updated_date: datetime | None
 
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)

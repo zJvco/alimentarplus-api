@@ -17,4 +17,9 @@ class CategoryIn(BaseModel):
 
 
 class CategoryOut(BaseModel):
-    pass
+    id: int
+    name: str
+    created_date: datetime
+    updated_date: datetime
+
+    products: List[Product]

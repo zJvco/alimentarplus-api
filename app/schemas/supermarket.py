@@ -6,15 +6,15 @@ from app.schemas.address import AddressOut, AddressIn
 from app.schemas.donation import DonationOut
 from app.schemas.product import ProductOut
 from app.schemas.user import UserOut
-from app.schemas.plan import PlanIn, PlanOut
+from app.schemas.plan import PlanIn, PlanOut, PlanInAuth
 
 
 class SupermarketIn(BaseModel):
     name: str # Nome fantasia
     business_name: str # Razão Social
-    state_registration: str # Inscrição Estadual
-    phone_number: constr(min_length=11, max_length=11)
-    cnpj: constr(min_length=14, max_length=14)
+    state_registration: constr(min_length=8, max_length=20, pattern=r'^\d+$') # Inscrição Estadual
+    phone_number: constr(min_length=11, max_length=11, pattern=r'^\d+$') 
+    cnpj: constr(min_length=14, max_length=14, pattern=r'^\d+$') 
 
     address: AddressIn
     plan: PlanIn 
@@ -26,9 +26,9 @@ class SupermarketOut(BaseModel):
     id: int
     name: str # Nome fantasia
     business_name: str # Razão Social
-    state_registration: str # Inscrição Estadual
-    phone_number: constr(min_length=11, max_length=11)
-    cnpj: constr(min_length=14, max_length=14)
+    state_registration: constr(min_length=8, max_length=20, pattern=r'^\d+$') # Inscrição Estadual
+    phone_number: constr(min_length=11, max_length=11, pattern=r'^\d+$') 
+    cnpj: constr(min_length=14, max_length=14, pattern=r'^\d+$') 
     created_date: datetime
     updated_date: datetime | None
 
@@ -39,9 +39,3 @@ class SupermarketOut(BaseModel):
     users: List[UserOut]
 
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
-
-
-# class SupermarketUpdatePlanIn(BaseModel):
-#     plan_id: int
-
-#     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
