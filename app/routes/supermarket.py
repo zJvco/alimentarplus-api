@@ -7,7 +7,7 @@ from app.repositories.product import ProductRepository
 from app.repositories.donation import DonationRepository
 from app.schemas.product import ProductIn, ProductOut
 from app.schemas.donation import DonationOut
-from app.schemas.plan import UpdatePlanIn
+from app.schemas.plan import PlanIn
 from app.repositories.plan import PlanRepository
 from app.utils import token_required
 
@@ -104,7 +104,7 @@ async def get_all_supermarket_donations(supermarket_id: int):
     
     
 @supermarket_router.post("/{supermarket_id}/update-plan")
-async def update_supermarket_plan(supermarket_id: int, plan_id: UpdatePlanIn):
+async def update_supermarket_plan(supermarket_id: int, plan_id: PlanIn):
     id = await SupermarketRepository.update_plan(supermarket_id, plan_id.id)
 
     return { "id": id }
