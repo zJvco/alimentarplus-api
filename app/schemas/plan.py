@@ -22,7 +22,7 @@ class PlanOut(BaseModel):
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
 
 
-class PlanInAuth(BaseException):
+class UpdatePlanIn(BaseModel):
     id: int
 
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)

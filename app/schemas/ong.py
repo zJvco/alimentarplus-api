@@ -15,7 +15,6 @@ class OngIn(BaseModel):
     cnpj: constr(min_length=14, max_length=14, pattern=r'^\d+$')
 
     address: AddressIn | None
-    # plan: PlanIn
     
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
 

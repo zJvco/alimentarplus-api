@@ -6,8 +6,8 @@ class ProductIn(BaseModel):
     name: str
     brand: str
     description: str | None = None
-    unit_weight_grams: constr(pattern=r'^\d+$')
-    total_weight_grams: constr(pattern=r'^\d+$')
+    unit_weight_grams: float
+    total_weight_grams: float
     quantity_units: int
     is_active: bool | None = None
     expiration_date: date
@@ -22,8 +22,8 @@ class ProductOut(BaseModel):
     name: str
     brand: str
     description: str | None
-    unit_weight_grams: constr(pattern=r'^\d+$')
-    total_weight_grams: constr(pattern=r'^\d+$')
+    unit_weight_grams: float
+    total_weight_grams: float
     quantity_units: int
     is_active: bool
     expiration_date: date

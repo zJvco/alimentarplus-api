@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, func, ForeignKey, Float, Date
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, func, ForeignKey, Numeric, Date
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -13,8 +13,8 @@ class Product(Base):
     name = Column(String, nullable=False, unique=True)
     brand = Column(String, nullable=False)
     description = Column(String)
-    unit_weight_grams = Column(String, nullable=False)
-    total_weight_grams = Column(String, nullable=False)
+    unit_weight_grams = Column(Numeric(10, 2), nullable=False)
+    total_weight_grams = Column(Numeric(10, 2), nullable=False)
     quantity_units = Column(Integer, nullable=False)
     is_active = Column(Boolean, nullable=False, default=True)
     expiration_date = Column(Date, nullable=False)

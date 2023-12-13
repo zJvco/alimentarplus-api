@@ -20,5 +20,5 @@ class DonationOut(BaseModel):
     id_product: int
     created_date: datetime
     updated_date: datetime | None
-
+    
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
