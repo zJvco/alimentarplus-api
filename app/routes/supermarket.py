@@ -44,7 +44,7 @@ async def get_supermarket_by_id(id: int):
 
 
 @supermarket_router.get("/{supermarket_id}/products", response_model=List[ProductOut])
-async def get_supermarket_products(supermarket_id: int):
+async def get_all_supermarket_products(supermarket_id: int):
     products = await ProductRepository.get_all_products_by_supermarket_id(supermarket_id)
 
     if not products:
@@ -100,6 +100,12 @@ async def delete_product(supermarket_id: int, product_id: int):
 async def get_all_supermarket_donations(supermarket_id: int):
     donations = await DonationRepository.get_all_donations_by_supermarket_id(supermarket_id)
 
+    if not donations:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Nenhuma doação disponivel no momento"
+        )
+    
     return donations
     
     

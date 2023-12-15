@@ -19,6 +19,12 @@ donation_router = APIRouter(
 async def get_donations():
     donations = await DonationRepository.get_all()
 
+    if not donations:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Nenhuma doação disponivel no momento"
+        )
+
     return donations
 
 
@@ -27,7 +33,6 @@ async def create_donation(data: DonationIn):
     product = await ProductRepository.get_by_id(data.id_product)
     product.is_active = False
 
-    # Precisa atualizar o campo is_active para false no produto
     try:
         await ProductRepository.update(product.id, dict(ProductIn(**product.__dict__)))
     except:
