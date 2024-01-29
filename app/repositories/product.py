@@ -14,7 +14,7 @@ class ProductRepository():
     @abstractmethod
     async def get_all_products_by_supermarket_id(supermarket_id: int):
         async with AsyncSessionLocal() as session:
-            query = select(Product).where(Supermarket.id == supermarket_id)
+            query = select(Product).where(Product.id_supermarket == supermarket_id)
             result = await session.execute(query)
 
         return result.scalars().fetchall()
@@ -22,7 +22,7 @@ class ProductRepository():
     @abstractmethod
     async def get_product_by_supermarket_id(supermarket_id: int, product_id: int):
         async with AsyncSessionLocal() as session:
-            query = select(Product).where(Supermarket.id == supermarket_id, Product.id == product_id)
+            query = select(Product).where(Product.id_supermarket == supermarket_id, Product.id == product_id)
             result = await session.execute(query)
 
         return result.scalar()

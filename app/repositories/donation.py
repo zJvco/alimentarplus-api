@@ -33,7 +33,7 @@ class DonationRepository(ABC):
     @abstractmethod
     async def get_all_donations_by_supermarket_id(supermarket_id: int):
         async with AsyncSessionLocal() as session:
-            query = select(Donation).where(Supermarket.id == supermarket_id)
+            query = select(Donation).where(Donation.id_supermarket == supermarket_id)
             result = await session.execute(query)
 
         return result.scalars().fetchall()
@@ -41,7 +41,7 @@ class DonationRepository(ABC):
     @abstractmethod
     async def get_all_donations_by_ong_id(ong_id: int):
         async with AsyncSessionLocal() as session:
-            query = select(Donation).where(Ong.id == ong_id)
+            query = select(Donation).where(Donation.id_ong == ong_id)
             result = await session.execute(query)
 
         return result.scalars().fetchall()

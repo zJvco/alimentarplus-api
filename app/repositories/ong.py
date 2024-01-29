@@ -17,7 +17,7 @@ class OngRepository(ABC):
             result = await session.execute(query)
 
         return result.scalars().fetchall()
-
+    
     @abstractmethod
     async def get_by_id(id: int):
         async with AsyncSessionLocal() as session:
