@@ -62,3 +62,14 @@ class DonationRepository(ABC):
 
         return donation
     
+    @abstractmethod
+    async def get_last_30_days_donations_by_supermarket_id(supermarket_id: int, start_date: str):
+        async with AsyncSessionLocal() as session:
+            query = select(Donation)\
+                        .where(Donation.id_supermarket == supermarket_id)\
+                        .filter(Donation.created_date >= start_date)\
+            
+            result = await session.execute(query)
+
+        return result.scalars().fetchall()
+    

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Request
 from typing import List
+from datetime import datetime, timedelta
 
 from app.repositories.supermarket import SupermarketRepository
 from app.schemas.supermarket import SupermarketIn, SupermarketOut
@@ -16,6 +17,9 @@ supermarket_router = APIRouter(
     dependencies=[Depends(token_required)]
 )
 
+#
+# Rotas de supermercado para criar, deletar, atualizar, obter e obter vários
+#
 
 @supermarket_router.get("/", response_model=List[SupermarketOut])
 async def get_supermarkets():
@@ -42,6 +46,9 @@ async def get_supermarket_by_id(id: int):
     
     return supermarket
 
+#
+# Rotas de produtos para criar, deletar, atualizar, obter e obter vários
+#
 
 @supermarket_router.get("/{supermarket_id}/products", response_model=List[ProductOut])
 async def get_all_supermarket_products(supermarket_id: int):
@@ -95,6 +102,9 @@ async def delete_product(supermarket_id: int, product_id: int):
 
     return { "id": id }
 
+#
+# Rotas de doação para criar, deletar, atualizar, obter e obter várias
+#
 
 @supermarket_router.get("/{supermarket_id}/donations", response_model=List[DonationOut])
 async def get_all_supermarket_donations(supermarket_id: int):
@@ -107,10 +117,26 @@ async def get_all_supermarket_donations(supermarket_id: int):
         )
     
     return donations
-    
+
+#
+# Rotas para atualizar o plano do supermercado
+#
     
 @supermarket_router.post("/{supermarket_id}/update-plan")
 async def update_supermarket_plan(supermarket_id: int, plan_id: UpdatePlanIn):
     id = await SupermarketRepository.update_plan(supermarket_id, plan_id.id)
 
     return { "id": id }
+
+#
+# Rotas de dados dos dashboards
+#
+
+@supermarket_router.get("/{supermarket_id}/dashboard/donations-last-30-days", response_model=List[DonationOut])
+async def get_supermarket_donations_last_30_days(supermarket_id: int):
+    todays_date = datetime.now()
+    start_date = todays_date - timedelta(days=30)
+
+    donations = await DonationRepository.get_last_30_days_donations_by_supermarket_id(supermarket_id, start_date.strftime('%Y-%m-%d'))
+
+    return donations

@@ -12,6 +12,9 @@ ong_router = APIRouter(
     dependencies=[Depends(token_required)]
 )
 
+#
+# Rotas da ong para criar, deletar, atualizar, obter e obter vários
+#
 
 @ong_router.get("/", response_model=List[OngOut])
 async def get_ongs():
@@ -19,13 +22,15 @@ async def get_ongs():
 
     return ongs
 
-
 @ong_router.get("/{ong_id}", response_model=OngOut)
 async def get_ong_by_id(ong_id: int):
     ong = await OngRepository.get_by_id(ong_id)
 
     return ong
 
+#
+# Rotas de doação para criar, deletar, atualizar, obter e obter várias
+#
 
 @ong_router.get("/{ong_id}/donations", response_model=List[DonationOut])
 async def get_all_ong_donations(ong_id: int):
