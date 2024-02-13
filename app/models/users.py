@@ -8,11 +8,11 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, nullable=False)
-    email = Column(String, unique=True, nullable=False)
+    name = Column(String(255), nullable=False)
+    email = Column(String(255), unique=True, nullable=False)
     phone_number = Column(String(11), unique=True, nullable=False)
     cpf = Column(String(11), unique=True, nullable=False)
-    password_hash = Column(String, nullable=False)
+    password_hash = Column(String(255), nullable=False)
     is_active = Column(Boolean, nullable=False, default=True)
     # id_role = Column(Integer, ForeignKey("roles.id"), nullable=False)
     id_supermarket = Column(Integer, ForeignKey("supermarkets.id"))

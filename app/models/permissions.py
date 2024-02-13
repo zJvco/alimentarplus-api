@@ -9,8 +9,8 @@ class Permission(Base):
     __tablename__ = "permissions"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    title = Column(String, nullable=False, unique=True)
-    description = Column(String)
+    title = Column(String(255), nullable=False, unique=True)
+    description = Column(String(255))
     created_date = Column(DateTime, default=func.now())
     updated_date = Column(DateTime, onupdate=func.now())
 

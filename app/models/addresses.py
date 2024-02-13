@@ -8,13 +8,13 @@ class Address(Base):
     __tablename__ = "addresses"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    street = Column(String, nullable=False) # Rua
-    number = Column(String, nullable=False) 
+    street = Column(String(255), nullable=False) # Rua
+    number = Column(String(255), nullable=False) 
     zip_code = Column(String(8), nullable=False) # CEP
-    neighborhood = Column(String, nullable=False) # Bairro
-    state = Column(String, nullable=False)
-    city = Column(String, nullable=False)
-    complement = Column(String)
+    neighborhood = Column(String(255), nullable=False) # Bairro
+    state = Column(String(255), nullable=False)
+    city = Column(String(255), nullable=False)
+    complement = Column(String(255))
     created_date = Column(DateTime, default=func.now())
     updated_date = Column(DateTime, onupdate=func.now())
 
